@@ -13,7 +13,6 @@ def log_start(process_name, step_name, details=None):
     RETURNING log_id
     """
 
-    # execute нужен для RETURNING
     conn = hook.get_conn()
     cur = conn.cursor()
     cur.execute(sql, (process_name, step_name, datetime.now(), details_json))

@@ -33,6 +33,7 @@ with DAG(
         start_date=datetime(2026, 4, 1),
         catchup=False,
 ) as dag:
+
     tables = [
         'ft_balance_f',
         'ft_posting_f',

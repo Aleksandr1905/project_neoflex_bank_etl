@@ -34,4 +34,16 @@ with DAG(
         sql='sql/init_db/03_create_etl_logs.sql'
     )
 
-    create_schemas >> create_raw_tables >> create_ds_tables >> create_etl_logs
+    create_dm_tables = SQLExecuteQueryOperator(
+        task_id='create_dm_tables',
+        conn_id='bank_db',
+        sql='sql/init_db/04_create_dm_tables.sql'
+    )
+
+    create_procedures = SQLExecuteQueryOperator(
+        task_id='create_procedures',
+        conn_id='bank_db',
+        sql='sql/init_db/05_create_procedures.sql'
+    )
+
+    create_schemas >> create_raw_tables >> create_ds_tables >> create_etl_logs >> create_procedures
