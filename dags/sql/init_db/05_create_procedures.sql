@@ -48,9 +48,9 @@ BEGIN
         i_OnDate,
         , ala.account_rk
         , ala.credit_amount
-        , ala.credit_amount * COALESCE(er.reduced_cource, 1)
+        , ala.credit_amount * COALESCE(exr.reduced_cource, 1)
         , ala.debet_amount
-        , ala.debet_amount * COALESCE(er.reduced_cource, 1)
+        , ala.debet_amount * COALESCE(exr.reduced_cource, 1)
     FROM all_accounts AS ala
     LEFT JOIN ds.md_account_d AS acc ON ala.account_rk = acc.account_rk
         AND i_OnDate BETWEEN acc.data_actual_date AND COALESCE(acc.data_actual_end_date, '2999-12-31')
