@@ -105,13 +105,13 @@ BEGIN
     INSERT INTO dm.dm_account_balance_f (on_date, account_rk, balance_out, balance_out_rub)
     SELECT
         v_init_date,
-        bf.account_rk,
-        bf.balance_out,
-        bf.balance_out * COALESCE(er.reduced_cource, 1)
-    FROM ds.ft_balance_f bf
-    LEFT JOIN ds.md_exchange_rate_d er ON er.currency_rk = bf.currency_rk
-        AND v_init_date BETWEEN er.data_actual_date AND COALESCE(er.data_actual_end_date, '2999-12-31')
-    WHERE bf.on_date = v_init_date;
+        , bal.account_rk
+        , bal.balance_out
+        , bal.balance_out * COALESCE(er.reduced_cource, 1)
+    FROM ds.ft_balance_f AS bal
+    LEFT JOIN ds.md_exchange_rate_d AS exr ON exr.currency_rk = bal.currency_rk
+        AND v_init_date BETWEEN exr.data_actual_date AND COALESCE(exr.data_actual_end_date, '2999-12-31')
+    WHERE bal.on_date = v_init_date;
 
     SELECT COUNT(*) INTO v_rows_affected
     FROM dm.dm_account_balance_f
