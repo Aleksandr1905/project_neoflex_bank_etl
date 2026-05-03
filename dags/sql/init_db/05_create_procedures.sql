@@ -20,38 +20,42 @@ BEGIN
 
     WITH
     debit_turnover AS (
-        SELECT debet_account_rk AS account_rk, SUM(debet_amount) AS debet_sum
+        SELECT
+            debet_account_rk AS account_rk
+            , SUM(debet_amount) AS debet_sum
         FROM ds.ft_posting_f
         WHERE oper_date = i_OnDate
         GROUP BY debet_account_rk
     ),
     credit_turnover AS (
-        SELECT credit_account_rk AS account_rk, SUM(credit_amount) AS credit_sum
+        SELECT
+            credit_account_rk AS account_rk
+            , SUM(credit_amount) AS credit_sum
         FROM ds.ft_posting_f
         WHERE oper_date = i_OnDate
         GROUP BY credit_account_rk
     ),
     all_accounts AS (
         SELECT
-            COALESCE(d.account_rk, c.account_rk) AS account_rk,
-            COALESCE(c.credit_sum, 0) AS credit_amount,
-            COALESCE(d.debet_sum, 0) AS debet_amount
-        FROM debit_turnover d
-        FULL JOIN credit_turnover c ON d.account_rk = c.account_rk
+            COALESCE(deb.account_rk, cre.account_rk) AS account_rk,
+            COALESCE(cre.credit_sum, 0) AS credit_amount,
+            COALESCE(deb.debet_sum, 0) AS debet_amount
+        FROM debit_turnover AS deb
+        FULL JOIN credit_turnover AS cre ON deb.account_rk = cre.account_rk
     )
     INSERT INTO dm.dm_account_turnover_f (on_date, account_rk, credit_amount, credit_amount_rub, debet_amount, debet_amount_rub)
     SELECT
         i_OnDate,
-        aa.account_rk,
-        aa.credit_amount,
-        aa.credit_amount * COALESCE(er.reduced_cource, 1),
-        aa.debet_amount,
-        aa.debet_amount * COALESCE(er.reduced_cource, 1)
-    FROM all_accounts aa
-    LEFT JOIN ds.md_account_d a ON a.account_rk = aa.account_rk
-        AND i_OnDate BETWEEN a.data_actual_date AND COALESCE(a.data_actual_end_date, '2999-12-31')
-    LEFT JOIN ds.md_exchange_rate_d er ON er.currency_rk = a.currency_rk
-        AND i_OnDate BETWEEN er.data_actual_date AND COALESCE(er.data_actual_end_date, '2999-12-31');
+        , ala.account_rk
+        , ala.credit_amount
+        , ala.credit_amount * COALESCE(er.reduced_cource, 1)
+        , ala.debet_amount
+        , ala.debet_amount * COALESCE(er.reduced_cource, 1)
+    FROM all_accounts AS ala
+    LEFT JOIN ds.md_account_d AS acc ON ala.account_rk = acc.account_rk
+        AND i_OnDate BETWEEN acc.data_actual_date AND COALESCE(acc.data_actual_end_date, '2999-12-31')
+    LEFT JOIN ds.md_exchange_rate_d AS exr ON exr.currency_rk = acc.currency_rk
+        AND i_OnDate BETWEEN exr.data_actual_date AND COALESCE(exr.data_actual_end_date, '2999-12-31');
 
     SELECT COUNT(*) INTO v_rows_affected
     FROM dm.dm_account_turnover_f
