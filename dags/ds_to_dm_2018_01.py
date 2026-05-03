@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -14,9 +14,6 @@ def calculate_january():
         pg_hook.run("CALL ds.fill_account_turnover_f(%s);", parameters=[date_str])
 
         pg_hook.run("CALL ds.fill_account_balance_f(%s);", parameters=[date_str])
-
-    print("Расчет за январь 2018 завершен!")
-
 
 with DAG(
         'dm_fill_2018_01',
