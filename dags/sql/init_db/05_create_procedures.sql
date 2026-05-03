@@ -45,7 +45,7 @@ BEGIN
     )
     INSERT INTO dm.dm_account_turnover_f (on_date, account_rk, credit_amount, credit_amount_rub, debet_amount, debet_amount_rub)
     SELECT
-        i_OnDate,
+        i_OnDate
         , ala.account_rk
         , ala.credit_amount
         , ala.credit_amount * COALESCE(exr.reduced_cource, 1)
@@ -104,10 +104,10 @@ BEGIN
 
     INSERT INTO dm.dm_account_balance_f (on_date, account_rk, balance_out, balance_out_rub)
     SELECT
-        v_init_date,
+        v_init_date
         , bal.account_rk
         , bal.balance_out
-        , bal.balance_out * COALESCE(er.reduced_cource, 1)
+        , bal.balance_out * COALESCE(exr.reduced_cource, 1)
     FROM ds.ft_balance_f AS bal
     LEFT JOIN ds.md_exchange_rate_d AS exr ON exr.currency_rk = bal.currency_rk
         AND v_init_date BETWEEN exr.data_actual_date AND COALESCE(exr.data_actual_end_date, '2999-12-31')
