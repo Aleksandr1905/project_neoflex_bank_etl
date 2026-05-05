@@ -2,7 +2,6 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-import time
 
 def calculate_january():
     pg_hook = PostgresHook(postgres_conn_id='bank_db')
@@ -10,15 +9,13 @@ def calculate_january():
 
     for day in range(1, 32):
         date_str = f'2018-01-{day:02d}'
-
         pg_hook.run("CALL ds.fill_account_turnover_f(%s);", parameters=[date_str])
-
         pg_hook.run("CALL ds.fill_account_balance_f(%s);", parameters=[date_str])
-        time.sleep(2)
+    pg_hook.run("CALL ds.fill_f101_round_f('2018-02-01')")
 with DAG(
         'ds_to_dm_2018_01',
         default_args={'owner': 'Aleksandr'},
-        description='Расчет витрин (обороты + остатки) за январь 2018',
+        description='Расчет витрин за январь 2018',
         schedule_interval=None,
         start_date=datetime(2026, 4, 1),
         catchup=False,

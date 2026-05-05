@@ -46,4 +46,4 @@ with DAG(
         sql='sql/init_db/05_create_procedures.sql'
     )
 
-    create_schemas >> create_raw_tables >> create_ds_tables >> create_etl_logs >> create_procedures
+    create_schemas >> create_raw_tables >> create_ds_tables >> create_etl_logs >> create_dm_tables >> create_procedures
