@@ -21,7 +21,7 @@ def import_f101():
         engine = hook.get_sqlalchemy_engine()
 
         df = pd.read_csv('/opt/airflow/data/dm_f101_round_f.csv', sep=';', encoding='utf-8')
-        df.to_sql('dm_f101_round_f_v2', engine, if_exists='append', index=False)
+        df.to_sql('dm_f101_round_f_v2', engine, if_exists='append', index=False, schema='dm')
 
         log_finish(log_id, 'SUCCESS', rows_affected=len(df))
     except Exception as e:
