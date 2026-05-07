@@ -140,6 +140,8 @@ SQL-скрипты лежат в папке dags/sql/init_db/
 ## Структура репозитория
 Структура репозитория:
 
+Структура репозитория:
+
 - `project_neoflex_bank_etl/`
   - `dags/`
     - `init_db.py`
@@ -148,7 +150,8 @@ SQL-скрипты лежат в папке dags/sql/init_db/
     - `dm_fill_2018_01.py`
     - `csv_import_f101.py`
     - `csv_export_f101.py`
-    - `logger.py`
+    - `utils/`
+      - `logger.py`
     - `sql/`
       - `init_db/`
         - `00_create_schemas.sql`
