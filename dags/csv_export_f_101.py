@@ -6,16 +6,15 @@ from utils.logger import log_start, log_finish
 import pandas as pd
 
 def export_f101():
-    log_id = log_start('csv_export_f101', 'export_to_csv', {})
+    log_id = log_start('csv_export_f101', 'export_to_csv')
 
     try:
         hook = PostgresHook(postgres_conn_id='bank_db')
-        engine = hook.get_sqlalchemy_engine()
 
-        df = pd.read_sql("""
-            SELECT * FROM dm.dm_f101_round_f 
-            ORDER BY ledger_account, characteristic
-        """, engine)
+        df = hook.get_pandas_df("""
+                    SELECT * FROM dm.dm_f101_round_f 
+                    ORDER BY ledger_account, characteristic
+                """)
 
         df.to_csv('/opt/airflow/data/dm_f101_round_f.csv', index=False, sep=';', encoding='utf-8')
 
