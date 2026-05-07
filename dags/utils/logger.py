@@ -13,15 +13,12 @@ def log_start(process_name, step_name, details=None):
     RETURNING log_id
     """
 
-    conn = hook.get_conn()
-    cur = conn.cursor()
-    cur.execute(sql, (process_name, step_name, datetime.now(), details_json))
-    log_id = cur.fetchone()[0]
-    conn.commit()
-    cur.close()
-    conn.close()
+    result = hook.get_first(sql, (process_name, step_name, datetime.now(), details_json))
 
-    return log_id
+    if result is None:
+        raise Exception("Не удалось получить log_id при вставке в лог")
+
+    return result[0]
 
 
 def log_finish(log_id, status, rows_affected=None, error_text=None):
@@ -33,9 +30,4 @@ def log_finish(log_id, status, rows_affected=None, error_text=None):
     WHERE log_id = %s
     """
 
-    conn = hook.get_conn()
-    cur = conn.cursor()
-    cur.execute(sql, (status, datetime.now(), rows_affected, error_text, log_id))
-    conn.commit()
-    cur.close()
-    conn.close()
+    hook.run(sql, parameters=(status, datetime.now(), rows_affected, error_text, log_id))
