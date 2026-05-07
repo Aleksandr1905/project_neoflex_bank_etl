@@ -18,10 +18,9 @@ def export_f101():
 
         df = pd.read_sql("""
             SELECT * FROM dm.dm_f101_round_f 
-            ORDER BY from_date, ledger_account, characteristic
+            ORDER ledger_account, characteristic
         """, engine)
 
-        # Сохраняем в CSV
         file_path = os.path.join(DATA_PATH, 'dm_f101_round_f.csv')
         df.to_csv(file_path, index=False, sep=';', encoding='utf-8')
 
@@ -42,5 +41,3 @@ with DAG(
         task_id='export_f101_to_csv',
         python_callable=export_f101
     )
-
-    export_task
