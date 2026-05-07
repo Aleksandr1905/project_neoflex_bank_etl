@@ -4,10 +4,6 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 from utils.logger import log_start, log_finish
 import pandas as pd
-import os
-
-DATA_PATH = '/opt/airflow/data'
-
 
 def export_f101():
     log_id = log_start('csv_export_f101', 'export_to_csv', {})
@@ -18,11 +14,10 @@ def export_f101():
 
         df = pd.read_sql("""
             SELECT * FROM dm.dm_f101_round_f 
-            ORDER ledger_account, characteristic
+            ORDER BY ledger_account, characteristic
         """, engine)
 
-        file_path = os.path.join(DATA_PATH, 'dm_f101_round_f.csv')
-        df.to_csv(file_path, index=False, sep=';', encoding='utf-8')
+        df.to_csv('/opt/airflow/data/dm_f101_round_f.csv', index=False, sep=';', encoding='utf-8')
 
         log_finish(log_id, 'SUCCESS', rows_affected=len(df))
     except Exception as e:
