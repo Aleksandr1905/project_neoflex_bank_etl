@@ -138,42 +138,43 @@ SQL-скрипты лежат в папке dags/sql/init_db/
 - `end_time` – время окончания
 
 ## Структура репозитория
-'''text
-project_neoflex_bank_etl/
-├── dags/
-│   ├── init_db.py
-│   ├── csv_to_raw.py
-│   ├── raw_to_ds.py
-│   ├── dm_fill_2018_01.py
-│   ├── logger.py
-│   ├── csv_import_f101.py
-│   ├── csv_export_f101.py
-│   └── sql/
-│       ├── init_db/
-│       │   ├── 00_create_schemas.sql
-│       │   ├── 01_create_raw_tables.sql
-│       │   ├── 02_create_ds_tables.sql
-│       │   ├── 03_create_etl_logs.sql
-│       │   ├── 04_create_dm_tables.sql
-│       │   └── 05_create_dm_procedures.sql
-│       └── raw_to_ds/
-│           ├── ft_balance_f.sql
-│           ├── ft_posting_f.sql
-│           ├── md_account_d.sql
-│           ├── md_currency_d.sql
-│           ├── md_exchange_rate_d.sql
-│           └── md_ledger_account_s.sql
-├── data/
-│   ├── ft_balance_f.csv
-│   ├── ft_posting_f.csv
-│   ├── md_account_d.csv
-│   ├── md_currency_d.csv
-│   ├── md_exchange_rate_d.csv
-│   └── md_ledger_account_s.csv
-├── .gitignore
-├── Dockerfile
-├── docker-compose.yml
-└── requirements.txt'''
+Структура репозитория:
+
+- `project_neoflex_bank_etl/`
+  - `dags/`
+    - `init_db.py`
+    - `csv_to_raw.py`
+    - `raw_to_ds.py`
+    - `dm_fill_2018_01.py`
+    - `csv_import_f101.py`
+    - `csv_export_f101.py`
+    - `logger.py`
+    - `sql/`
+      - `init_db/`
+        - `00_create_schemas.sql`
+        - `01_create_raw_tables.sql`
+        - `02_create_ds_tables.sql`
+        - `03_create_etl_logs.sql`
+        - `04_create_dm_tables.sql`
+        - `05_create_dm_procedures.sql`
+      - `raw_to_ds/`
+        - `ft_balance_f.sql`
+        - `ft_posting_f.sql`
+        - `md_account_d.sql`
+        - `md_currency_d.sql`
+        - `md_exchange_rate_d.sql`
+        - `md_ledger_account_s.sql`
+  - `data/`
+    - `ft_balance_f.csv`
+    - `ft_posting_f.csv`
+    - `md_account_d.csv`
+    - `md_currency_d.csv`
+    - `md_exchange_rate_d.csv`
+    - `md_ledger_account_s.csv`
+  - `.gitignore`
+  - `Dockerfile`
+  - `docker-compose.yml`
+  - `requirements.txt`
 
 ## Запуск проекта
 
