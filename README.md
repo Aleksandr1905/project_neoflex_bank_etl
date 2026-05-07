@@ -138,6 +138,7 @@ SQL-скрипты лежат в папке dags/sql/init_db/
 - `end_time` – время окончания
 
 ## Структура репозитория
+'''text
 project_neoflex_bank_etl/
 ├── dags/
 │   ├── init_db.py
@@ -172,7 +173,7 @@ project_neoflex_bank_etl/
 ├── .gitignore
 ├── Dockerfile
 ├── docker-compose.yml
-└── requirements.txt
+└── requirements.txt'''
 
 ## Запуск проекта
 
